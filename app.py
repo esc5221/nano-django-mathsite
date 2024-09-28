@@ -7,12 +7,14 @@ import os
 from nanodjango import Django
 
 # 도메인 설정
-domain = "mathsite.example.com"
+domain = os.environ.get("APP_DOMAIN", "domain.com")
+print("domain:", domain)
 
 # nanodjango 인스턴스 설정
 app = Django(
     ADMIN_URL="secret-admin/",
     ALLOWED_HOSTS=["localhost", "127.0.0.1", "0.0.0.0", domain],
+    CSRF_TRUSTED_ORIGINS=[f"https://{domain}"],
     SECRET_KEY=os.environ.get("SECRET_KEY", "unset"),
     SQLITE_DATABASE="mathsite.sqlite3",
     MIGRATIONS_DIR="mathsite_migrations",

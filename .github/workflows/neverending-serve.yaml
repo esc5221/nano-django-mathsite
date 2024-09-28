@@ -1,0 +1,64 @@
+name: neverending-serve
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+env:
+  APP_DOMAIN: barely-assured-whale.ngrok-free.app
+      
+concurrency:
+  group: "neverending-serve"
+  cancel-in-progress: true
+jobs:
+  delay-and-dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Create docker-compose.yaml
+        run: |
+          cat << EOF > docker-compose.yaml
+          version: '3.8'
+          services:
+            web:
+              build:
+                context: .
+                dockerfile_inline: |
+                  FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+                  WORKDIR /app
+                  COPY app.py .
+                  EXPOSE 8000
+              ports:
+                - "8000:8000"
+              volumes:
+                - .:/app
+                - /app/.git
+              environment:
+                - APP_DOMAIN=${{ env.APP_DOMAIN }}
+              command: uv run app.py
+          EOF
+      
+      - name: Run server with docker-compose
+        run: docker compose -f docker-compose.yaml up -d
+      
+      - name: Ngrok Tunnel Action (v3)
+        uses: esc5221/ngrok-tunnel-action@v1.0.2
+        with:
+          timeout: 6h
+          port: "8000 --domain=${{ env.APP_DOMAIN }}"
+          ngrok_authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
+          tunnel_type: http
+          save_url_to_filename: tunnel_url.md
+      
+      - name: Tail logs
+        run: docker compose -f docker-compose.yaml logs -f
+      
+      - name: Dispatch next workflow run
+        uses: benc-uk/workflow-dispatch@v1.2.3
+        with:
+          workflow: "neverending-serve.yaml"
