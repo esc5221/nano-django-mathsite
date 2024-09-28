@@ -114,12 +114,6 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(
-        required=True,
-        widget=forms.EmailInput(
-            attrs={"class": "form-control", "placeholder": "이메일 주소"}
-        ),
-    )
     image = forms.ImageField(
         required=False, widget=forms.FileInput(attrs={"class": "form-control"})
     )
@@ -127,16 +121,6 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "email", "image", "password1", "password2")
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = app.cleaned_data["email"]
-        if commit:
-            user.save()
-            if app.cleaned_data.get("image"):
-                user.userprofile.image = app.cleaned_data.get("image")
-                user.userprofile.save()
-        return user
 
 
 @app.route("/signup/", name="signup")
