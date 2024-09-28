@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}수학 문제 풀이 사이트{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Bootstrap 5 CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link href="https://unpkg.com/@webpixels/css@1.2.6/dist/index.css" rel="stylesheet">
+
+
+        <!-- Font Awesome CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            integrity="sha512-p7nS+GkRRieyFZkFp5K+vIu5GLx9dJ6u5C4lS5MxV8zMbs+6hvX4bLqgX6E4jI8Sg4uQ5Y4f9X47z6JXhPgyDw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+
+        <!-- MathJax -->
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script
+            id="MathJax-script"
+            async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+        ></script>
+
+        <!-- Custom CSS (optional) -->
+        <style>
+            .navbar {
+                margin-bottom: 20px;
+            }
+
+            .footer {
+                padding: 20px 0;
+                text-align: center;
+                border-top: 1px solid #eaeaea;
+                margin-top: 50px;
+                color: #777;
+            }
+            .card {
+                border-radius: 10px;
+            }
+            .form-label {
+                font-weight: 600;
+            }
+            .btn-primary {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+            .btn-primary:hover {
+                background-color: #004494;
+                border-color: #004494;
+            }
+
+            @media (max-width: 768px) {
+                .card-title {
+                    font-size: 1.2rem;
+                }
+                .btn {
+                    width: 100%;s
+                    margin-bottom: 10px;
+                }
+            }
+        </style>
+
+        {% block extra_head %}
+        {% endblock %}
+    </head>
+    <body>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">수학 문제 풀이</a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <!-- templates/base.html -->
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/problems/">문제 목록</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/solved/">푼 문제</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/">대시보드</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile/">프로필</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout/">로그아웃</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login/">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/signup/">회원가입</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container">{% block content %}{% endblock %}</div>
+
+        <!-- Footer -->
+        <div class="footer">&copy; {% now "Y" %} 수학 문제 풀이 사이트. All rights reserved.</div>
+
+        <!-- Bootstrap 5 JS and dependencies -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>

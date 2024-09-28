@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ problem.title }} - 수학 문제 풀이 사이트{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">{{ problem.title }}</h6>
+                <small>{{ problem.created_at|date:"Y-m-d H:i" }}</small>
+            </div>
+            <div class="card-body">
+                {% if problem.image %}
+                    <img src="{{ problem.image.url }}" class="img-fluid mb-4" alt="문제 이미지">
+                {% endif %}
+                <p class="mb-4">{{ problem.description|safe }}</p>
+                <hr>
+                {% if solved %}
+                    {% if correct %}
+                        <div class="alert alert-success" role="alert">
+                            풀이 기록: {{ solved.solved_at|date:"Y-m-d H:i" }} - 정답입니다!
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger" role="alert">
+                            풀이 기록: {{ solved.solved_at|date:"Y-m-d H:i" }} - 오답입니다.
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <form method="POST" action="/problems/{{ problem.id }}/" class="mb-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="answer" class="form-label">답을 입력하세요</label>
+                            <input type="text" class="form-control" id="answer" name="answer" required placeholder="답을 입력하세요">
+                        </div>
+                        <button type="submit" class="btn btn-success"><i class="fas fa-check fa-fw me-1"></i>제출</button>
+                        {% if problem.hint %}
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hintModal">
+                                <i class="fas fa-lightbulb fa-fw me-1"></i>힌트 보기
+                            </button>
+                        {% endif %}
+                    </form>
+                    {% if correct is not None %}
+                        {% if correct %}
+                            <div class="alert alert-success mt-3" role="alert">
+                                정답입니다! 문제를 푼 목록에 추가되었습니다.
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger mt-3" role="alert">
+                                오답입니다. 다시 시도해 보세요.
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 힌트 모달 -->
+        {% if problem.hint %}
+        <div class="modal fade" id="hintModal" tabindex="-1" aria-labelledby="hintModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">힌트</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ problem.hint|safe }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

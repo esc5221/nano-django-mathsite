@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}대시보드 - 수학 문제 풀이 사이트{% endblock %} 
+
+{% block content %}
+<h1 class="h3 mb-4 text-gray-800">대시보드</h1>
+
+<div class="row">
+    <!-- 총 푼 문제 수 카드 -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">총 푼 문제 수</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_solved }} / {{ total_problems }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 문제 해결률 카드 -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">문제 해결률</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ percentage|floatformat:2 }}%</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 추가적인 통계 카드 (예시: 최근 풀이 문제) -->
+    <div class="col-xl-4 col-md-12 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">최근 푼 문제</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    {% for solved in recent_solved %}
+                        <a href="/problems/{{ solved.problem.id }}/">{{ solved.problem.title }}</a>{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        아직 푼 문제가 없습니다.
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

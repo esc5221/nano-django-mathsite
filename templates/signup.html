@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}회원가입 - 수학 문제 풀이 사이트{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-xl-10 col-lg-12 col-md-9">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-6 d-none d-lg-block bg-signup-image"></div>
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">회원가입</h1>
+                            </div>
+                            <form class="user" method="POST" action="/signup/" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- 사용자 이름 필드 -->
+                                <div class="mb-3">
+                                    <input type="text" 
+                                           class="form-control form-control-user {% if form.username.errors %}is-invalid{% endif %}" 
+                                           id="id_username" 
+                                           name="username" 
+                                           value="{{ form.username.value|default_if_none:'' }}" 
+                                           placeholder="사용자 이름을 입력하세요" 
+                                           required>
+                                    {% if form.username.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.username.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- 이메일 필드 -->
+                                <div class="mb-3">
+                                    <input type="email" 
+                                           class="form-control form-control-user {% if form.email.errors %}is-invalid{% endif %}" 
+                                           id="id_email" 
+                                           name="email" 
+                                           value="{{ form.email.value|default_if_none:'' }}" 
+                                           placeholder="이메일 주소를 입력하세요" 
+                                           required>
+                                    {% if form.email.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.email.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- 프로필 이미지 업로드 필드 -->
+                                <div class="mb-3">
+                                    <label for="id_image" class="form-label">프로필 사진 (선택 사항)</label>
+                                    <input type="file" 
+                                           class="form-control form-control-user {% if form.image.errors %}is-invalid{% endif %}" 
+                                           id="id_image" 
+                                           name="image">
+                                    {% if form.image.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.image.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- 비밀번호 필드 -->
+                                <div class="mb-3">
+                                    <input type="password" 
+                                           class="form-control form-control-user {% if form.password1.errors %}is-invalid{% endif %}" 
+                                           id="id_password1" 
+                                           name="password1" 
+                                           placeholder="비밀번호를 입력하세요" 
+                                           required>
+                                    {% if form.password1.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.password1.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- 비밀번호 확인 필드 -->
+                                <div class="mb-4">
+                                    <input type="password" 
+                                           class="form-control form-control-user {% if form.password2.errors %}is-invalid{% endif %}" 
+                                           id="id_password2" 
+                                           name="password2" 
+                                           placeholder="비밀번호를 다시 입력하세요" 
+                                           required>
+                                    {% if form.password2.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.password2.errors.0 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- 제출 버튼 -->
+                                <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    회원가입
+                                </button>
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="/login/">이미 계정이 있으신가요? 로그인</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>
+{% endblock %}
