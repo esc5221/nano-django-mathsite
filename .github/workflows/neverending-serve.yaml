@@ -33,6 +33,7 @@ jobs:
                 context: .
                 dockerfile_inline: |
                   FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+                  RUN apt-get update && apt-get install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
                   WORKDIR /app
                   COPY app.py .
                   EXPOSE 8000
@@ -40,7 +41,6 @@ jobs:
                 - "8000:8000"
               volumes:
                 - .:/app
-                - /app/.git
               environment:
                 APP_DOMAIN: ${{ env.APP_DOMAIN }}
               command: uv run app.py
