@@ -1,5 +1,8 @@
 # /// script
-# dependencies = ["nanodjango", "Pillow"]
+# dependencies = [
+#     "nanodjango@git+https://github.com/esc5221/nanodjango",
+#     "Pillow",
+# ]
 # ///
 
 
